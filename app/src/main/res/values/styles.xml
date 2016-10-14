@@ -1,0 +1,55 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="AppTheme.Base">
+        <item name="colorPrimary">@color/top_bar_background</item>
+        <item name="colorPrimaryDark">@color/top_bar_background</item>
+        <item name="colorAccent">@color/top_bar_background</item>
+    </style>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light">
+        <item name="windowActionBar">false</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
+
+    <style name="common_install_btn_style">
+        <item name="android:textSize">@dimen/app_install_size</item>
+        <item name="android:textColor">#ff8fc55b</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/btn_common_install</item>
+        <item name="android:text">"安装"</item>
+        <item name="android:height">@dimen/app_install_height</item>
+        <item name="android:width">@dimen/app_install_width</item>
+    </style>
+
+    <style name="common_download_btn_style">
+        <item name="android:textSize">@dimen/app_install_size</item>
+        <item name="android:textColor">#ff8fc55b</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/btn_common_install</item>
+        <item name="android:text">"暂停"</item>
+        <item name="android:height">@dimen/app_install_height</item>
+        <item name="android:width">@dimen/app_install_width</item>
+    </style>
+
+    <style name="detail_ratingbar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:baselineAlignBottom">true</item>
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/ratingbar_detail</item>
+        <item name="android:minHeight">@dimen/ratingbar_height</item>
+        <item name="android:isIndicator">true</item>
+        <item name="android:thumb">@null</item>
+        <item name="android:numStars">5</item>
+        <item name="android:stepSize">1.0</item>
+    </style>
+
+</resources>

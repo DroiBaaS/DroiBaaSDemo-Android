@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="5dip"
+    android:paddingTop="5dip">
+
+    <ImageView
+        android:id="@+id/app_icon"
+        android:layout_width="@dimen/app_icon_size"
+        android:layout_height="@dimen/app_icon_size"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/def_item" />
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_icon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:ellipsize="end"
+        android:paddingLeft="3.0dip"
+        android:paddingRight="3.0dip"
+        android:singleLine="true"
+        android:textColor="@color/app_name_color"
+        android:textSize="@dimen/app_name_text_size" />
+
+    <TextView
+        android:id="@+id/app_detail_install_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text=">20万次安装"
+        android:textColor="@color/app_string_color"
+        android:textSize="@dimen/app_gray_text_size" />
+
+    <TextView
+        android:id="@+id/item_app_install_button"
+        style="@style/common_install_btn_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_detail_install_count"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/app_install_margin_top" />
+
+</RelativeLayout>

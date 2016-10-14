@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_main"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+        <ImageView
+            android:id="@+id/head_icon_bg"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            android:src="@drawable/profile_background" />
+
+        <com.droi.sdk.droibaasdemo.views.RoundImageView
+            android:id="@+id/head_icon"
+            android:layout_width="@dimen/head_icon_size"
+            android:layout_height="@dimen/head_icon_size"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/profile_default_icon" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/head_icon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="@string/fragment_mine_login"
+            android:textColor="@android:color/white"
+            android:textSize="18.0sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/mine_frag_account"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/fragment_mine_ripple"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/fragment_mine_account_info"
+        android:textColor="@color/normal_font_color"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/mine_frag_update"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/fragment_mine_ripple"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/fragment_mine_updating"
+        android:textColor="@color/normal_font_color"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/mine_frag_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/fragment_mine_ripple"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/fragment_mine_feedback"
+        android:textColor="@color/normal_font_color"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/mine_frag_download"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/fragment_mine_ripple"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/fragment_mine_download"
+        android:textColor="@color/normal_font_color"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/mine_frag_upload"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/fragment_mine_ripple"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="上传"
+        android:textColor="@color/normal_font_color"
+        android:textSize="20sp"
+        android:visibility="visible" />
+
+</LinearLayout>

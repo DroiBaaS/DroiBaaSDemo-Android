@@ -1,0 +1,20 @@
+<resources>
+    <dimen name="top_bar_height">50dp</dimen>
+    <dimen name="top_bar_back_arrow_width">50dp</dimen>
+    <dimen name="top_bar_title_size">23sp</dimen>
+    <dimen name="toolbar_search_size">20sp</dimen>
+
+    <dimen name="banner_height">120dp</dimen>
+
+    <dimen name="head_icon_size">80dp</dimen>
+
+    <dimen name="app_gray_text_size">12.0sp</dimen>
+    <dimen name="app_icon_size">67.5dip</dimen>
+    <dimen name="app_install_height">25.5dip</dimen>
+    <dimen name="app_install_size">13.5sp</dimen>
+    <dimen name="app_install_width">66.0dip</dimen>
+    <dimen name="app_name_text_size">14.0sp</dimen>
+    <dimen name="app_install_margin_top">4.0dip</dimen>
+
+    <dimen name="ratingbar_height">13.299988dip</dimen>
+</resources>

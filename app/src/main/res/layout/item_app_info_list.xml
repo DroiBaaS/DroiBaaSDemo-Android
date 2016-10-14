@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="9.0dip">
+
+    <ImageView
+        android:id="@+id/app_icon"
+        android:layout_width="@dimen/app_icon_size"
+        android:layout_height="@dimen/app_icon_size"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:src="@mipmap/def_item" />
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/app_icon"
+        android:ellipsize="end"
+        android:paddingLeft="3.0dip"
+        android:paddingRight="3.0dip"
+        android:paddingTop="15dp"
+        android:singleLine="true"
+        android:text="应用名称"
+        android:textColor="@color/app_name_color"
+        android:textSize="@dimen/app_name_text_size" />
+
+    <RatingBar
+        android:id="@+id/app_rating_bar"
+        style="@style/detail_ratingbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_name"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/app_icon" />
+
+    <TextView
+        android:id="@+id/app_detail_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_rating_bar"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/app_icon"
+        android:text="> "
+        android:textColor="@color/app_string_color"
+        android:textSize="@dimen/app_gray_text_size" />
+
+    <TextView
+        android:id="@+id/app_detail_install_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_rating_bar"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/app_detail_arrow"
+        android:text="安装数量 "
+        android:textColor="@color/app_string_color"
+        android:textSize="@dimen/app_gray_text_size" />
+
+    <TextView
+        android:id="@+id/app_vertical_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_rating_bar"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/app_detail_install_count"
+        android:text=" | "
+        android:textColor="@color/app_string_color"
+        android:textSize="@dimen/app_gray_text_size" />
+
+    <TextView
+        android:id="@+id/app_detail_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_rating_bar"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/app_vertical_line"
+        android:text="6.0 MB"
+        android:textColor="@color/app_string_color"
+        android:textSize="@dimen/app_gray_text_size" />
+
+    <TextView
+        android:id="@+id/item_app_install_button"
+        style="@style/common_install_btn_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="@dimen/app_install_margin_top" />
+
+    <TextView
+        android:id="@+id/item_app_brief"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_icon"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="20dp"
+        android:singleLine="true"
+        android:text="应用介绍应用介绍应用介绍应用介绍"
+        android:textColor="@color/app_string_color"
+        android:textSize="@dimen/app_gray_text_size" />
+
+</RelativeLayout>

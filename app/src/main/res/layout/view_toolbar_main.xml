@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/top_bar_height"
+    android:background="@color/top_bar_background"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <TextView
+            android:id="@+id/toolbar_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@null"
+            android:drawableLeft="@mipmap/ic_search"
+            android:drawablePadding="8dp"
+            android:hint="@string/activity_main_search_hint"
+            android:minWidth="150dp"
+            android:singleLine="true"
+            android:textColor="@color/white_half_alpha"
+            android:textColorHint="@color/white_half_alpha"
+            android:textSize="@dimen/toolbar_search_size" />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.Toolbar>

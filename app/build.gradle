@@ -1,0 +1,45 @@
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "com.droi.sdk.droibaasdemo"
+        minSdkVersion 19
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    jcenter()
+    maven {
+        url "https://github.com/DroiBaaS/DroiBaaS-SDK-Android/raw/master/"
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    apt 'com.droi.sdk:annotationprocessor:+'
+    compile 'com.droi.sdk:Core:+'
+    compile 'com.squareup.okhttp3:okhttp:3.0.1'
+    compile 'com.droi.sdk:analytics:+'
+    compile 'com.droi.sdk:feedback:+'
+    compile 'com.droi.sdk:selfupdate:+'
+    compile 'com.droi.sdk:push:+'
+    compile 'com.droi.sdk:oauth:+'
+    compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'org.xutils:xutils:3.3.36'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+}

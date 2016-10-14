@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.droi.sdk.droibaasdemo">
+
+    <application
+        android:name="com.droi.sdk.droibaasdemo.MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.droi.sdk.application_id"
+            android:value="ad8umbzht9fvyax7wc6XA2H7FHLmYpM0lQB-994R" />
+        <meta-data
+            android:name="com.droi.sdk.platform_key"
+            android:value="JUHPZZsBCmtNTmdsQuyGKxHExAJrqo2GKxHExAJr" />
+        <meta-data
+            android:name="com.droi.sdk.channel_name"
+            android:value="DROI_CHANNEL1" />
+        <!-- 推送消息加密秘钥，应用创建后由平台自动生成，以下内容为示例 -->
+        <meta-data
+            android:name="com.droi.sdk.secret_key"
+            android:value="jg7pwcsc" />
+
+        <!-- 上海环境 -->
+        <!--        <meta-data
+                    android:name="com.droi.sdk.server"
+                    android:value="http://10.0.10.213:18080/ip_list" />-->
+
+        <activity
+            android:name="com.droi.sdk.droibaasdemo.activities.MainActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.droi.sdk.droibaasdemo.activities.AppInfosActivity" />
+        <activity android:name="com.droi.sdk.droibaasdemo.activities.AppInfoDetailActivity" />
+        <activity android:name="com.droi.sdk.droibaasdemo.activities.SearchActivity" />
+        <activity android:name="com.droi.sdk.droibaasdemo.activities.DownloadActivity" />
+        <activity
+            android:name="com.droi.sdk.droibaasdemo.activities.LoginActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name="com.droi.sdk.droibaasdemo.activities.ProfileActivity" />
+        <activity android:name="com.droi.sdk.droibaasdemo.activities.ChangePasswordActivity" />
+
+    </application>
+
+</manifest>
