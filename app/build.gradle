@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
     defaultConfig {
@@ -21,9 +21,11 @@ android {
 }
 
 repositories {
-    jcenter()
     maven {
         url "https://github.com/DroiBaaS/DroiBaaS-SDK-Android/raw/master/"
+    }
+    maven {
+        url "http://gitlab.droi.com/DroiBaaS/DroiBaaS-SDK-Android/raw/master/"
     }
 }
 
@@ -37,9 +39,9 @@ dependencies {
     compile 'com.droi.sdk:selfupdate:+'
     compile 'com.droi.sdk:push:+'
     compile 'com.droi.sdk:oauth:+'
-    compile 'com.android.support:support-v4:24.2.1'
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:support-v4:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:design:23.0.1'
     compile 'org.xutils:xutils:3.3.36'
     compile 'com.squareup.picasso:picasso:2.5.2'
 }

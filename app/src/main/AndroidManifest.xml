@@ -24,11 +24,6 @@
             android:name="com.droi.sdk.secret_key"
             android:value="jg7pwcsc" />
 
-        <!-- 上海环境 -->
-        <!--        <meta-data
-                    android:name="com.droi.sdk.server"
-                    android:value="http://10.0.10.213:18080/ip_list" />-->
-
         <activity
             android:name="com.droi.sdk.droibaasdemo.activities.MainActivity"
             android:screenOrientation="portrait">

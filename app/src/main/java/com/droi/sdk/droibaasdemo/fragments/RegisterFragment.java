@@ -2,7 +2,6 @@ package com.droi.sdk.droibaasdemo.fragments;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -19,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.droi.sdk.DroiCallback;
 import com.droi.sdk.DroiError;
 import com.droi.sdk.analytics.DroiAnalytics;
 import com.droi.sdk.core.DroiUser;
@@ -30,12 +30,6 @@ import com.droi.sdk.droibaasdemo.R;
 
 public class RegisterFragment extends Fragment {
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserRegisterTask mAuthTask = null;
-
-    // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private EditText mConfirmPasswordView;
@@ -102,25 +96,15 @@ public class RegisterFragment extends Fragment {
         return view;
     }
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
     private void attemptLogin() {
         //计数事件
         DroiAnalytics.onEvent(getActivity(), "register");
-
-        if (mAuthTask != null) {
-            return;
-        }
 
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
         mConfirmPasswordView.setError(null);
 
-        // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
         String confirmPassword = mConfirmPasswordView.getText().toString();
@@ -128,7 +112,6 @@ public class RegisterFragment extends Fragment {
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
         if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
@@ -151,18 +134,29 @@ public class RegisterFragment extends Fragment {
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserRegisterTask(email, password);
-            mAuthTask.execute((Void) null);
+            DroiUser user = new DroiUser();
+            user.setUserId(email);
+            user.setPassword(password);
+            user.signUpInBackground(new DroiCallback<Boolean>() {
+                @Override
+                public void result(Boolean aBoolean, DroiError droiError) {
+                    showProgress(false);
+                    if (droiError.isOk()) {
+                        activity.finish();
+                    } else {
+                        if (droiError.getCode() == DroiError.USER_ALREADY_EXISTS) {
+                            mPasswordView.setError(getString(R.string.error_user_already_exists));
+                            mPasswordView.requestFocus();
+                        } else {
+                            Toast.makeText(getActivity(), getString(R.string.error_network), Toast.LENGTH_SHORT);
+                        }
+                    }
+                }
+            });
         }
-    }
-
-    private boolean isNameValid(String name) {
-        return name.length() > 4;
     }
 
     private boolean isEmailValid(String email) {
@@ -185,52 +179,6 @@ public class RegisterFragment extends Fragment {
             mProgressView.show();
         } else {
             mProgressView.dismiss();
-        }
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserRegisterTask extends AsyncTask<Void, Void, DroiError> {
-        private final String mEmail;
-        private final String mPassword;
-
-        UserRegisterTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected DroiError doInBackground(Void... params) {
-            DroiUser user = new DroiUser();
-            user.setUserId(mEmail);
-            //user.setEmail(mEmail);
-            user.setPassword(mPassword);
-            DroiError droiError = user.signUp();
-            return droiError;
-        }
-
-        @Override
-        protected void onPostExecute(final DroiError droiError) {
-            mAuthTask = null;
-            showProgress(false);
-            if (droiError.isOk()) {
-                activity.finish();
-            } else {
-                if (droiError.getCode() == DroiError.USER_ALREADY_EXISTS) {
-                    mPasswordView.setError(getString(R.string.error_user_already_exists));
-                    mPasswordView.requestFocus();
-                } else {
-                    Toast.makeText(getActivity(), getString(R.string.error_network), Toast.LENGTH_SHORT);
-                }
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
         }
     }
 }

@@ -26,6 +26,7 @@ import com.droi.sdk.core.DroiUser;
 import com.droi.sdk.droibaasdemo.R;
 import com.droi.sdk.droibaasdemo.models.MyUser;
 import com.droi.sdk.droibaasdemo.utils.CommonUtils;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -62,20 +63,14 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         if (user != null && user.isAuthorized() && !user.isAnonymous()) {
             userNameText.setText(user.getUserId());
             if (user.getHeadIcon() != null) {
-                user.getHeadIcon().getUri();
-                user.getHeadIcon().getInBackground(new DroiCallback<byte[]>() {
+                user.getHeadIcon().getUriInBackground(new DroiCallback<Uri>() {
                     @Override
-                    public void result(byte[] bytes, DroiError error) {
-                        if (error.isOk()) {
-                            if (bytes == null) {
-                                Log.i(TAG, "bytes == null");
-                            } else {
-                                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                                headImageView.setImageBitmap(bitmap);
-                            }
+                    public void result(Uri uri, DroiError droiError) {
+                        if (droiError.isOk()){
+                            Picasso.with(mContext).load(uri).into(headImageView);
                         }
                     }
-                }, null);
+                });
             }
         } else {
             headImageView.setImageResource(R.drawable.profile_default_icon);

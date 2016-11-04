@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.droi.sdk.DroiCallback;
 import com.droi.sdk.DroiError;
 import com.droi.sdk.analytics.DroiAnalytics;
 import com.droi.sdk.core.DroiUser;
@@ -37,12 +38,7 @@ import org.json.JSONObject;
 public class LoginFragment extends Fragment {
 
     private static String TAG = "LoginFragment";
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
 
-    // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private ProgressDialog mProgressView;
@@ -114,23 +110,13 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
     private void attemptLogin() {
         //计数事件
         DroiAnalytics.onEvent(getActivity(), "login");
-        if (mAuthTask != null) {
-            return;
-        }
 
-        // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
-        // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
@@ -156,13 +142,29 @@ public class LoginFragment extends Fragment {
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            DroiUser.loginInBackground(email, password, MyUser.class, new DroiCallback<DroiUser>() {
+                @Override
+                public void result(DroiUser droiUser, DroiError droiError) {
+                    showProgress(false);
+                    if (droiError.isOk()) {
+                        Toast.makeText(getActivity(), R.string.login_success, Toast.LENGTH_SHORT).show();
+                        activity.finish();
+                    } else {
+                        if (droiError.getCode() == DroiError.USER_NOT_EXISTS) {
+                            mEmailView.setError(getString(R.string.error_user_not_exists));
+                            mEmailView.requestFocus();
+                        } else if (droiError.getCode() == DroiError.USER_PASSWORD_INCORRECT) {
+                            mPasswordView.setError(getString(R.string.error_incorrect_password));
+                            mPasswordView.requestFocus();
+                        } else {
+                            Toast.makeText(getActivity(), getString(R.string.error_network), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -188,94 +190,43 @@ public class LoginFragment extends Fragment {
     String mOpenId;
     String mToken;
 
+    //未完成
     private void oauthLogin() {
         Log.i("TEST", "oauthLogin");
-        DroiOauth
-                .requestTokenAuth(getActivity(), new DroiAccountLoginCallBack() {
-                    @Override
-                    public void onSuccess(String result) {
-                        //登录成功操作
-                        try {
-                            JSONObject jsonObject = new JSONObject(result);
-                            if (jsonObject.has("openid")) {
-                                mOpenId = jsonObject.getString("openid");
-                            }
-                            if (jsonObject.has("token")) {
-                                mToken = jsonObject.getString("token");
-                            }
-                        } catch (JSONException e) {
-                            DroiAnalytics.onError(getActivity(), e);
-                        }
-                        getActivity().finish();
+        DroiOauth.requestTokenAuth(getActivity(), new DroiAccountLoginCallBack() {
+            @Override
+            public void onSuccess(String result) {
+                //登录成功操作
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    if (jsonObject.has("openid")) {
+                        mOpenId = jsonObject.getString("openid");
                     }
-
-                    @Override
-
-                    public void onError(String result) {
-                        //登录失败操作
-                        Log.i(TAG, "error:" + result);
-                        DroiAnalytics.onError(getActivity(), result);
-                        getActivity().finish();
+                    if (jsonObject.has("token")) {
+                        mToken = jsonObject.getString("token");
                     }
-                });
+                } catch (JSONException e) {
+                    DroiAnalytics.onError(getActivity(), e);
+                }
+                getActivity().finish();
+            }
+
+            @Override
+            public void onError(String result) {
+                //登录失败操作
+                DroiAnalytics.onError(getActivity(), result);
+                getActivity().finish();
+            }
+        });
     }
 
+    //未完成
     private void getAccountInfo() {
-        DroiOauth.getAccountInfo( mOpenId, mToken, new Scope[]{Scope.USERINFO}, new GetAccountInfoCallBack(){
+        DroiOauth.getAccountInfo(mOpenId, mToken, new Scope[]{Scope.USERINFO}, new GetAccountInfoCallBack() {
             @Override
             public void onGetAccountInfo(OauthError oauthError, String s) {
                 //获取账号信息
             }
         });
-    }
-
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, DroiError> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected DroiError doInBackground(Void... params) {
-            DroiError droiError = new DroiError();
-            MyUser user = DroiUser.login(mEmail,
-                    mPassword, MyUser.class, droiError);
-            return droiError;
-        }
-
-        @Override
-        protected void onPostExecute(final DroiError droiError) {
-            mAuthTask = null;
-            showProgress(false);
-            if (droiError.isOk()) {
-                Toast.makeText(getActivity(), R.string.login_success, Toast.LENGTH_SHORT).show();
-                activity.finish();
-            } else {
-                if (droiError.getCode() == DroiError.USER_NOT_EXISTS) {
-                    mEmailView.setError(getString(R.string.error_user_not_exists));
-                    mEmailView.requestFocus();
-                } else if (droiError.getCode() == DroiError.USER_PASSWORD_INCORRECT) {
-                    mPasswordView.setError(getString(R.string.error_incorrect_password));
-                    mPasswordView.requestFocus();
-                } else {
-                    Toast.makeText(getActivity(), getString(R.string.error_network), Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
     }
 }
