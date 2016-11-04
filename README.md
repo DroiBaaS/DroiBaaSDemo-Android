@@ -27,90 +27,96 @@
 
 #### 一、登录/注册
 1. 注册用户
-``` java
-DroiUser user = new DroiUser();
-user.setUserId(email);
-user.setPassword(password);
-user.signUpInBackground(new DroiCallback<Boolean>() {
-    @Override
-    public void result(Boolean aBoolean, DroiError droiError) {
-        showProgress(false);
-        if (droiError.isOk()) {
-            // 注册成功
-        } else {
-            // 注册失败，可以通过 droiError.getCode 获取错误码
-        }
-    }
-});
-```
 
-2. 登录
-``` java
- DroiUser.loginInBackground(email, password, MyUser.class, new DroiCallback<DroiUser>() {
-    @Override
-    public void result(DroiUser droiUser, DroiError droiError) {
-        showProgress(false);
-        if (droiError.isOk()) {
-            // 登录成功
-        } else {
-            // 登录失败，可以通过 droiError.getCode 获取错误码
-        }
-    }
-});
-```
-3. 修改密码
-``` java
-String oldPassword = "oldPassword";
-String newPassword = "newPassword";
-// 一般从EditText获得
-DroiUser myUser = DroiUser.getCurrentUser();
-if (myUser != null && myUser.isAuthorized() && !myUser.isAnonymous()) {
-    myUser.changePasswordInBackground(oldPassword, newPassword, new DroiCallback<Boolean>() {
+    ``` java
+    DroiUser user = new DroiUser();
+    user.setUserId(email);
+    user.setPassword(password);
+    user.signUpInBackground(new DroiCallback<Boolean>() {
         @Override
         public void result(Boolean aBoolean, DroiError droiError) {
-            if (aBoolean) {
-                // 修改成功
+            showProgress(false);
+            if (droiError.isOk()) {
+                // 注册成功
             } else {
-                // 修改失败
+                // 注册失败，可以通过 droiError.getCode 获取错误码
             }
         }
     });
-}
-```
+    ```
 
-3. 上传头像
-``` java
-DroiFile headIcon = new DroiFile(new File(path)); //path 是图片路径
-MyUser user = DroiUser.getCurrentUser(MyUser.class);
-user.setHeadIcon(headIcon);
-user.saveInBackground(new DroiCallback<Boolean>() {
-    @Override
-    public void result(Boolean aBoolean, DroiError droiError) {
-        if (aBoolean) {
-            // 上传成功
-        } else {
-            // 上传失败
+2. 登录
+
+    ``` java
+    DroiUser.loginInBackground(email, password, MyUser.class, new DroiCallback<DroiUser>() {
+        @Override
+        public void result(DroiUser droiUser, DroiError droiError) {
+            showProgress(false);
+            if (droiError.isOk()) {
+                // 登录成功
+            } else {
+                // 登录失败，可以通过 droiError.getCode 获取错误码
+            }
         }
-    }
-});
-```
+    });
+    ```
 
-4. 显示头像
-``` java
-MyUser user = DroiUser.getCurrentUser(MyUser.class);
-if (user != null && user.isAuthorized() && !user.isAnonymous()) {
-    if (user.getHeadIcon() != null) {
-        user.getHeadIcon().getUriInBackground(new DroiCallback<Uri>() {
+3. 修改密码
+
+    ``` java
+    String oldPassword = "oldPassword";
+    String newPassword = "newPassword";
+    // 一般从EditText获得
+    DroiUser myUser = DroiUser.getCurrentUser();
+    if (myUser != null && myUser.isAuthorized() && !myUser.isAnonymous()) {
+        myUser.changePasswordInBackground(oldPassword, newPassword, new DroiCallback<Boolean>() {
             @Override
-            public void result(Uri uri, DroiError droiError) {
-                if (droiError.isOk()){
-                    // 加载头像
+            public void result(Boolean aBoolean, DroiError droiError) {
+                if (aBoolean) {
+                    // 修改成功
+                } else {
+                    // 修改失败
                 }
             }
         });
     }
-}
-```
+    ```
+
+4. 上传头像
+
+    ``` java
+    DroiFile headIcon = new DroiFile(new File(path)); //path 是图片路径
+    MyUser user = DroiUser.getCurrentUser(MyUser.class);
+    user.setHeadIcon(headIcon);
+    user.saveInBackground(new DroiCallback<Boolean>() {
+        @Override
+        public void result(Boolean aBoolean, DroiError droiError) {
+            if (aBoolean) {
+                // 上传成功
+            } else {
+                // 上传失败
+            }
+        }
+    });
+    ```
+
+5. 显示头像
+
+    ``` java
+    MyUser user = DroiUser.getCurrentUser(MyUser.class);
+    if (user != null && user.isAuthorized() && !user.isAnonymous()) {
+        if (user.getHeadIcon() != null) {
+            user.getHeadIcon().getUriInBackground(new DroiCallback<Uri>() {
+                @Override
+                public void result(Uri uri, DroiError droiError) {
+                    if (droiError.isOk()){
+                        // 加载头像
+                    }
+                }
+            });
+        }
+    }
+    ```
 
 #### 二、首页banner展示
 
