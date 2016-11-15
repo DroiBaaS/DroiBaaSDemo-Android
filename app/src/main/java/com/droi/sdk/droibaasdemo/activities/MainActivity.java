@@ -73,7 +73,6 @@ public class MainActivity extends BaseActivity {
                     case UpdateStatus.UPDATING:
                         Toast.makeText(mContext, R.string.update_status_updating, Toast.LENGTH_SHORT).show();
                         break;
-
                 }
             }
         });

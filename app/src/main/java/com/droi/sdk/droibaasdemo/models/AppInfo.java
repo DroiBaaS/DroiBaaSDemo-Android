@@ -26,16 +26,12 @@ public class AppInfo extends DroiObject {
     private String intro;
     @DroiExpose
     private String brief;
-    /*    @DroiExpose
-        public Date updateTime;*/
     @DroiExpose
     private String version;
     @DroiExpose
     private String apkUrl;
     @DroiExpose
     private String type;
-
-    private DroiFile apkFile;
     @DroiExpose
     private String mainType;
     @DroiExpose
@@ -85,10 +81,6 @@ public class AppInfo extends DroiObject {
         this.type = type;
     }
 
-    public void setApkFile(DroiFile apkFile) {
-        this.apkFile = apkFile;
-    }
-
     public void setMainType(String mainType) {
         this.mainType = mainType;
     }
@@ -125,10 +117,6 @@ public class AppInfo extends DroiObject {
         return version;
     }
 
-   /* public Date getUpdateTime() {
-        return updateTime;
-    }*/
-
     public String getIntro() {
         return intro;
     }
@@ -139,10 +127,6 @@ public class AppInfo extends DroiObject {
 
     public String getType() {
         return type;
-    }
-
-    public DroiFile getApkFile() {
-        return apkFile;
     }
 
     public String getApkUrl() {

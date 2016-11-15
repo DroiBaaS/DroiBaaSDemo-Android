@@ -9,19 +9,9 @@ import com.droi.sdk.core.DroiUser;
  */
 public class MyUser extends DroiUser {
     @DroiExpose
-    private String phoneNumber;
-    @DroiExpose
     private String address;
     @DroiExpose
     private DroiFile headIcon;
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 
     public String getAddress() {
         return address;

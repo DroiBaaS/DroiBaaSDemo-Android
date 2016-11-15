@@ -8,20 +8,9 @@ import com.droi.sdk.core.DroiObject;
  */
 public class Banner extends DroiObject {
     @DroiExpose
-    private String id;
-    private AppInfo appInfo;
-    @DroiExpose
     private String appId;
     @DroiExpose
     private String imgUrl;
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setAppInfo(AppInfo appInfo) {
-        this.appInfo = appInfo;
-    }
 
     public void setAppId(String appId) {
         this.appId = appId;
@@ -31,16 +20,8 @@ public class Banner extends DroiObject {
         this.imgUrl = imgUrl;
     }
 
-    public AppInfo getAppInfo() {
-        return appInfo;
-    }
-
     public String getImgUrl() {
         return imgUrl;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getAppId() {
