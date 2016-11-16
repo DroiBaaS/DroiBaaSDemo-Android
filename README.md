@@ -9,13 +9,23 @@
 4. 的上传头像/显示头像
 
 ### 二、首页banner展示
-在首页展示一些banner信息用于活动推广等作用
+在首页展示一些banner信息用于活动推广等作用  
+效果图如下：  
+<img src="./pic/main.png"/>
 
 ### 三、app信息list展示
 在不同的界面展示不同的app list
 
 ### 四、搜索app功能
 用关键字对应用进行简单的筛选
+
+### 五、其他功能
+其他功能主要放在我的页面中：登录功能入口、版本更新、用户反馈等。  
+我的页面效果图如下：  
+<img src="./pic/mine.png"/>
+
+自更新效果图如下：  
+<img src="./pic/selfupdate.png"/>
 
 ## 方案选择
 
@@ -187,9 +197,6 @@ query.runQueryInBackground(new DroiQueryCallback<Banner>() {
 });
 ```
 
-效果图如下：  
-<img src="./pic/main.png"/>
-
 #### 三、app信息list展示
 和`Banner`一样也需要通过`DroiBaaS`的web控制台可以创建`AppInfo`类，并且可以通过增加列的方式增加属性。
 可以通过增加行的方式来添加一条数据。
@@ -271,7 +278,6 @@ query.runQueryInBackground(new DroiQueryCallback<AppInfo>() {
 
 #### 五、其他功能
 其他一些功能可以通过在我的页面点击按钮来调用，也有一些功能可以在初始化时添加。  
-<img src="./pic/mine.png"/>
 
 1. 版本更新
 在此工程中，总共在两处添加版本更新sdk。
@@ -280,9 +286,6 @@ query.runQueryInBackground(new DroiQueryCallback<AppInfo>() {
     ``` java
     DroiUpdate.update(this);
     ```
-    自更新效果图如下：  
-    <img src="./pic/selfupdate.png"/>
-    
     还有一次是在我的页面中，通过手动点击的方式调用：
     ``` java
     @Override
