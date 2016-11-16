@@ -11,7 +11,7 @@
 ### 二、首页banner展示
 在首页展示一些banner信息用于活动推广等作用  
 效果图如下：  
-<img src="./pic/main.png" width = "150" height = "267" alt="mian" align=center />
+<img src="./pic/main.png" width = "200" height = "356" alt="mian" align=center />
 
 ### 三、app信息list展示
 在不同的界面展示不同的app list
@@ -22,10 +22,10 @@
 ### 五、其他功能
 其他功能主要放在我的页面中：登录功能入口、版本更新、用户反馈等。  
 我的页面效果图如下：  
-<img src="./pic/mine.png" width = "150" height = "267" alt="mian" align=center />
+<img src="./pic/mine.png" width = "200" height = "356" alt="mian" align=center />
 
 自更新效果图如下：  
-<img src="./pic/selfupdate.png" width = "150" height = "267" alt="mian" align=center />
+<img src="./pic/selfupdate.png" width = "200" height = "356" alt="mian" align=center />
 
 ## 方案选择
 
