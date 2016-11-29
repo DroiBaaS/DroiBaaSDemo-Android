@@ -151,7 +151,7 @@ public class RegisterFragment extends Fragment {
                             mPasswordView.setError(getString(R.string.error_user_already_exists));
                             mPasswordView.requestFocus();
                         } else {
-                            Toast.makeText(getActivity(), getString(R.string.error_network), Toast.LENGTH_SHORT);
+                            Toast.makeText(getActivity(), getString(R.string.error_network), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
