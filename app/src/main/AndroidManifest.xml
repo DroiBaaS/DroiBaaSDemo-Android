@@ -14,15 +14,8 @@
             android:name="com.droi.sdk.application_id"
             android:value="ad8umbzht9fvyax7wc6XA2H7FHLmYpM0lQB-994R" />
         <meta-data
-            android:name="com.droi.sdk.platform_key"
-            android:value="JUHPZZsBCmtNTmdsQuyGKxHExAJrqo2GKxHExAJr" />
-        <meta-data
             android:name="com.droi.sdk.channel_name"
             android:value="DROI_CHANNEL1" />
-        <!-- 推送消息加密秘钥，应用创建后由平台自动生成，以下内容为示例 -->
-        <meta-data
-            android:name="com.droi.sdk.secret_key"
-            android:value="jg7pwcsc" />
 
         <activity
             android:name="com.droi.sdk.droibaasdemo.activities.MainActivity"

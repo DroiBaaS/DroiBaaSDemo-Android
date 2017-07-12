@@ -118,7 +118,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 //DroiFeedback.setTitleBarColor(Color.GREEN);
                 //DroiFeedback.setSendButtonColor(Color.GREEN,Color.GREEN);
                 //打开反馈页面
-                DroiFeedback.callFeedback(mContext);
+                DroiFeedback.callFeedback(getActivity());
                 break;
             case R.id.mine_frag_download:
                 toDownload();

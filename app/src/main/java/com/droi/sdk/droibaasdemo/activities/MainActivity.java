@@ -64,9 +64,6 @@ public class MainActivity extends BaseActivity {
                     case UpdateStatus.ERROR:
                         Toast.makeText(mContext, R.string.update_status_error, Toast.LENGTH_SHORT).show();
                         break;
-                    case UpdateStatus.TIMEOUT:
-                        Toast.makeText(mContext, R.string.update_status_timeout, Toast.LENGTH_SHORT).show();
-                        break;
                     case UpdateStatus.NON_WIFI:
                         Toast.makeText(mContext, R.string.update_status_nonwifi, Toast.LENGTH_SHORT).show();
                         break;

@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.droi.sdk.DroiError;
 import com.droi.sdk.analytics.DroiAnalytics;
-import com.droi.sdk.analytics.Logger;
 import com.droi.sdk.analytics.SendPolicy;
 import com.droi.sdk.core.Core;
 import com.droi.sdk.core.DroiCloudCache;
@@ -60,10 +59,7 @@ public class MyApplication extends Application {
 
         Log.i(TAG, "DroiPush");
         //初始化
-        DroiPush.initialize(this);
-        //设置标签
-        DroiPush.addTag(this, new String[]{"test1", "test2"}, false);
-        DroiPush.removeTag(this, new String[]{"test2,test3"});
+        DroiPush.initialize(this, "tz7uaHGrJTTXfssSGzJexEXWznSjXZjonSkv8iyWF7WV4-IDLTjFoLJgBcmge0ZR");
         //设置静默时间为0:30 到 8:00
         DroiPush.setSilentTime(this, 0, 30, 8, 0);
 
@@ -74,7 +70,7 @@ public class MyApplication extends Application {
                 //使用DroiPreference设置是否打开push功能
                 boolean enablePush = DroiPreference.instance().getBoolean("push", true);
                 Log.i(TAG, "DroiPreference:" + enablePush);
-                DroiPush.setPushEnabled(getApplicationContext(), enablePush);
+                DroiPush.setPushableState(getApplicationContext(), enablePush);
                 //DroiCloudCache
                 // 设定数据
                 DroiCloudCache.set("keyName", "54678");
@@ -102,10 +98,8 @@ public class MyApplication extends Application {
         DroiAnalytics.enableActivityLifecycleCallbacks(this);
         //默认为true；关闭可以设为false
         DroiAnalytics.setCrashReport(true);
-        //设置是否附带log，默认为false；Logger类记录的log才会被上传
-        DroiAnalytics.setCrashReportWithLog(true);
         //Logger必须在DroiAnalytics初始化后使用
-        Logger.i(TAG, "上传log");
+        Log.i(TAG, "上传log");
         //发送策略，默认实时
         DroiAnalytics.setDefaultSendPolicy(SendPolicy.SCHEDULE);
         //设置非实时策略下，是否只在wifi下发送以及发送间隔(分钟)
@@ -119,7 +113,7 @@ public class MyApplication extends Application {
 
         Log.i(TAG, "DroiUpdate");
         //初始化
-        DroiUpdate.initialize(this);
+        DroiUpdate.initialize(this, "Mbz3QgAN3gg8hqkU8H1tpqhP-kh3jQ4_MrUW3amrQAtVJBXZUyyqWuM5i4UJsdf5");
         //是否只在wifi下更新，默认true
         DroiUpdate.setUpdateOnlyWifi(true);
         //UI类型，默认BOTH

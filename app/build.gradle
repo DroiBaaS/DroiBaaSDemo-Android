@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "com.droi.sdk.droibaasdemo"
@@ -11,6 +11,7 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+        manifestPlaceholders = [DROI_PUSH_APPID: 'ad8umbzht9fvyax7wc6XA2H7FHLmYpM0lQB-994R']
     }
     buildTypes {
         release {
@@ -38,9 +39,9 @@ dependencies {
     compile 'com.droi.sdk:push:+'
     compile 'com.droi.sdk:Utility:+'
     compile 'com.droi.sdk:oauth:+'
-    compile 'com.android.support:support-v4:23.0.1'
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:design:23.0.1'
+    compile 'com.android.support:support-v4:25.0.0'
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:design:25.0.0'
     compile 'org.xutils:xutils:3.3.36'
     compile 'com.squareup.picasso:picasso:2.5.2'
 }

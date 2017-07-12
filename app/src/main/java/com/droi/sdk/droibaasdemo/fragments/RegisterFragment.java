@@ -137,7 +137,7 @@ public class RegisterFragment extends Fragment {
             focusView.requestFocus();
         } else {
             showProgress(true);
-            DroiUser user = new DroiUser();
+            DroiUser user = DroiUser.getCurrentUser();
             user.setUserId(email);
             user.setPassword(password);
             user.signUpInBackground(new DroiCallback<Boolean>() {
