@@ -52,4 +52,9 @@
         <item name="android:stepSize">1.0</item>
     </style>
 
+    <style name="avatar_select_menu_anim_style">
+        <item name="android:windowEnterAnimation">@anim/show_pop_anim</item>
+        <item name="android:windowExitAnimation">@anim/hide_pop_anim</item>
+    </style>
+
 </resources>

@@ -66,7 +66,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 user.getHeadIcon().getUriInBackground(new DroiCallback<Uri>() {
                     @Override
                     public void result(Uri uri, DroiError droiError) {
-                        if (droiError.isOk()){
+                        if (droiError.isOk()) {
                             Picasso.with(mContext).load(uri).into(titleImg);
                         }
                     }

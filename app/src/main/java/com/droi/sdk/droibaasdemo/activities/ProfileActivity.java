@@ -1,23 +1,25 @@
 package com.droi.sdk.droibaasdemo.activities;
 
-import android.content.ActivityNotFoundException;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.droi.sdk.DroiCallback;
 import com.droi.sdk.DroiError;
 import com.droi.sdk.analytics.DroiAnalytics;
@@ -25,30 +27,41 @@ import com.droi.sdk.core.DroiFile;
 import com.droi.sdk.core.DroiUser;
 import com.droi.sdk.droibaasdemo.R;
 import com.droi.sdk.droibaasdemo.models.MyUser;
-import com.droi.sdk.droibaasdemo.utils.CommonUtils;
+import com.droi.sdk.droibaasdemo.utils.AvatarUtil;
+import com.droi.sdk.droibaasdemo.utils.StringUtil;
+import com.droi.sdk.droibaasdemo.utils.Util;
 import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 /**
  * Created by chenpei on 2016/5/30.
  */
+
 public class ProfileActivity extends BaseActivity implements View.OnClickListener {
     private static String TAG = "ProfileActivity";
-    TextView userNameText;
-    ImageView headImageView;
-    private Button btn_take_photo, btn_pick_photo, btn_cancel;
-    private LinearLayout layout;
-    private ProgressBar progressBar;
-    View selectPic;
-    Context mContext;
+    private final int mPhotoPickSize = 96;
+    private static final int REQUEST_CODE_CAMERA_WITH_DATA = 1;
+    private static final int REQUEST_CODE_PHOTO_PICKED_WITH_DATA = REQUEST_CODE_CAMERA_WITH_DATA + 1;
+    private static final int REQUEST_CROP_PHOTO = REQUEST_CODE_PHOTO_PICKED_WITH_DATA + 1;
+    private static final int CROP_PHOTO_FROM_GALLERY = 1;
+    private static final int CROP_PHOTO_FROM_CAMERA = 2;
+
+    private TextView userNameText;
+    private ImageView headImageView;
+    private Context mContext;
+    private LayoutInflater mInflater;
+
+    //avatar
+    private Uri mTempPhotoUri;
+    private Uri mCroppedPhotoUri;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         mContext = this;
+        mInflater = LayoutInflater.from(getApplicationContext());
         initUI();
         refreshView();
     }
@@ -66,7 +79,7 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
                 user.getHeadIcon().getUriInBackground(new DroiCallback<Uri>() {
                     @Override
                     public void result(Uri uri, DroiError droiError) {
-                        if (droiError.isOk()){
+                        if (droiError.isOk()) {
                             Picasso.with(mContext).load(uri).into(headImageView);
                         }
                     }
@@ -93,15 +106,6 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
                 finish();
             }
         });
-        btn_take_photo = (Button) this.findViewById(R.id.btn_take_photo);
-        btn_pick_photo = (Button) this.findViewById(R.id.btn_pick_photo);
-        btn_cancel = (Button) this.findViewById(R.id.btn_cancel);
-        progressBar = (ProgressBar) this.findViewById(R.id.progress_bar);
-        selectPic = findViewById(R.id.select_pic);
-        layout = (LinearLayout) findViewById(R.id.pop_layout);
-        btn_cancel.setOnClickListener(this);
-        btn_pick_photo.setOnClickListener(this);
-        btn_take_photo.setOnClickListener(this);
     }
 
     @Override
@@ -109,8 +113,9 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         DroiUser user = DroiUser.getCurrentUser();
         switch (v.getId()) {
             case R.id.head:
-                selectPic.setVisibility(View.VISIBLE);
+                showAvatarSourceMenu();
                 break;
+
             case R.id.profile_logout:
                 DroiAnalytics.onEvent(this, "logout");
                 DroiError droiError;
@@ -131,122 +136,203 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
                 Intent changePasswordIntent = new Intent(this, ChangePasswordActivity.class);
                 startActivity(changePasswordIntent);
                 break;
-            case R.id.btn_take_photo:
-                try {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, 1);
-                } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case R.id.btn_pick_photo:
-                try {
-                    Intent intent;
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                        intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    } else {
-                        intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    }
-                    intent.setType("image/*");
-                    startActivityForResult(intent, 2);
-                } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
-                }
-                break;
-            case R.id.btn_cancel:
-                selectPic.setVisibility(View.GONE);
-                break;
             default:
                 break;
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i(TAG, "onActivityResult");
-        if (resultCode != RESULT_OK) {
-            Log.i(TAG, "resultCode != RESULT_OK");
-            Toast.makeText(mContext, "获取图片失败", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        progressBar.setVisibility(View.VISIBLE);
-        layout.setVisibility(View.GONE);
-        if (data != null) {
-            upload(data);
+    private void showAvatarSourceMenu() {
+
+        View view = mInflater.inflate(R.layout.layout_select_avatar_menu, null, false);
+
+        Button fromCameraBtn = (Button) view.findViewById(R.id.btn_take_photo);
+        Button fromGalleryBtn = (Button) view.findViewById(R.id.btn_pick_photo);
+        Button cancelBtn = (Button) view.findViewById(R.id.btn_cancel);
+
+        final PopupWindow window = new PopupWindow(view, WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT);
+
+        window.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        window.setFocusable(true);
+
+        ColorDrawable dw = new ColorDrawable(0x00FFFFFF);
+        window.setBackgroundDrawable(dw);
+
+        window.setAnimationStyle(R.style.avatar_select_menu_anim_style);
+
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = 0.5f;
+        getWindow().setAttributes(lp);
+
+        window.showAtLocation(userNameText, Gravity.BOTTOM, 0, 0);
+
+        window.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                lp.alpha = 1.0f;
+                getWindow().setAttributes(lp);
+            }
+        });
+
+
+        fromCameraBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseTakePhoto();
+                window.dismiss();
+            }
+        });
+
+        fromGalleryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickFromGallery();
+                window.dismiss();
+            }
+        });
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                window.dismiss();
+            }
+        });
+    }
+
+    private void chooseTakePhoto() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        mTempPhotoUri = AvatarUtil.generateTempImageUri(ProfileActivity.this);
+        mCroppedPhotoUri = AvatarUtil.generateTempCroppedImageUri(ProfileActivity.this);
+        // where to store the image after take photo
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mTempPhotoUri);
+        startActivityForResult(intent, REQUEST_CODE_CAMERA_WITH_DATA);
+    }
+
+    private void pickFromGallery() {
+        mCroppedPhotoUri = AvatarUtil.generateTempCroppedImageUri(ProfileActivity.this);
+        Intent intent = getPhotoPickIntent(null);
+        startActivityForResult(intent, REQUEST_CODE_PHOTO_PICKED_WITH_DATA);
+    }
+
+    private Intent getPhotoPickIntent(Uri outputUri) {
+        Intent intent;
+        if (Build.VERSION.SDK_INT < 19) {
+            intent = new Intent();
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
         } else {
-            Toast.makeText(mContext, "上传失败", Toast.LENGTH_SHORT).show();
-            selectPic.setVisibility(View.GONE);
+            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("image/*");
+        }
+        return intent;
+    }
+
+    private void cropPhoto(Uri uri, Uri outputUri, int source) {
+        if (source == CROP_PHOTO_FROM_CAMERA) {
+            if (uri != null) {
+                File file = new File(uri.getPath());
+                if (file == null || file.exists() == false) {
+                    return;
+                }
+            }
+        }
+
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        // which image to crop
+        intent.setDataAndType(uri, "image/*");
+        // where to save the cropped photo
+        AvatarUtil.addPhotoPickerExtras(intent, outputUri);
+        // crop data
+        AvatarUtil.addCropExtras(intent, mPhotoPickSize);
+
+        try {
+            startActivityForResult(intent, REQUEST_CROP_PHOTO);
+        } catch (Exception e) {
         }
     }
 
-    private void upload(Intent data) {
-        Log.i(TAG, "upload");
-        Uri mImageCaptureUri = data.getData();
-        if (mImageCaptureUri != null) {
-            Log.i(TAG, "pick pic");
-            Bitmap image;
-            try {
-                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageCaptureUri);
-                if (image != null) {
-                    String path = CommonUtils.getPath(this, mImageCaptureUri);
-                    Log.i("TEST", "path=" + path);
-                    DroiFile headIcon = new DroiFile(new File(path));
-                    MyUser user = DroiUser.getCurrentUser(MyUser.class);
-                    user.setHeadIcon(headIcon);
-                    user.saveInBackground(new DroiCallback<Boolean>() {
-                        @Override
-                        public void result(Boolean aBoolean, DroiError droiError) {
-                            if (aBoolean) {
-                                Toast.makeText(mContext, "上传成功", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(mContext, "上传失败", Toast.LENGTH_SHORT).show();
-                            }
-                            selectPic.setVisibility(View.GONE);
-                        }
-                    });
-                } else {
-                    Toast.makeText(mContext, "上传失败", Toast.LENGTH_SHORT).show();
-                    selectPic.setVisibility(View.GONE);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE_CAMERA_WITH_DATA: {
+                if (resultCode == Activity.RESULT_OK) {
+                    cropPhoto(mTempPhotoUri, mCroppedPhotoUri, CROP_PHOTO_FROM_CAMERA);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(mContext, "上传失败", Toast.LENGTH_SHORT).show();
-                selectPic.setVisibility(View.GONE);
             }
-        } else {
-            Log.i(TAG, "take photo");
-            Bundle extras = data.getExtras();
-            if (extras != null) {
-                //这里是有些拍照后的图片是直接存放到Bundle中的所以我们可以从这里面获取Bitmap图片
-                Bitmap image = extras.getParcelable("data");
-                if (image != null) {
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    image.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                    byte[] imageBytes = baos.toByteArray();
-                    DroiFile headIcon = new DroiFile(imageBytes);
-                    MyUser user = DroiUser.getCurrentUser(MyUser.class);
-                    user.setHeadIcon(headIcon);
-                    user.saveInBackground(new DroiCallback<Boolean>() {
-                        @Override
-                        public void result(Boolean aBoolean, DroiError droiError) {
-                            if (aBoolean) {
-                                Toast.makeText(mContext, "上传成功", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(mContext, "上传失败", Toast.LENGTH_SHORT).show();
+            break;
+
+            case REQUEST_CROP_PHOTO: {
+                saveImage();
+            }
+            break;
+
+            case REQUEST_CODE_PHOTO_PICKED_WITH_DATA: {
+                if (resultCode == Activity.RESULT_OK) {
+                    if (data != null) {
+                        final Uri toCrop = data.getData();
+                        if (toCrop != null) {
+                            if (mCroppedPhotoUri == null) {// in case of pick from
+                                // gallery, and take
+                                // photo
+                                mCroppedPhotoUri = AvatarUtil.generateTempCroppedImageUri(ProfileActivity.this);
                             }
-                            selectPic.setVisibility(View.GONE);
+                            cropPhoto(toCrop, mCroppedPhotoUri, CROP_PHOTO_FROM_GALLERY);
                         }
-                    });
-                } else {
-                    Toast.makeText(mContext, "上传失败", Toast.LENGTH_SHORT).show();
-                    selectPic.setVisibility(View.GONE);
+                    }
                 }
-            } else {
-                Toast.makeText(mContext, "上传失败", Toast.LENGTH_SHORT).show();
-                selectPic.setVisibility(View.GONE);
             }
+            break;
+
+            default:
+                break;
         }
+    }
+
+    private void saveImage() {
+        if (mCroppedPhotoUri == null) {
+            Util.showMessage(getApplicationContext(), R.string.upload_avatar_failed);
+            return;
+        }
+
+        try {
+            Bitmap photo = AvatarUtil.getBitmapFromUri(getApplicationContext(), mCroppedPhotoUri);
+            AvatarUtil.saveBitmap(getApplicationContext(), photo);
+            uploadAvatar(mCroppedPhotoUri.getPath());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            Util.showMessage(getApplicationContext(), R.string.upload_avatar_failed);
+        }
+    }
+
+    private void uploadAvatar(String filePath) {
+        Log.i(TAG, "upload");
+
+        if (StringUtil.isStringNullOrEmpty(filePath)) {
+            return;
+        }
+
+        File avatarFile = new File(filePath);
+        if (!avatarFile.exists() || !avatarFile.isFile()) {
+            return;
+        }
+
+        final DroiFile headIcon = new DroiFile(avatarFile);
+        final MyUser user = DroiUser.getCurrentUser(MyUser.class);
+        user.setHeadIcon(headIcon);
+        user.saveInBackground(new DroiCallback<Boolean>() {
+            @Override
+            public void result(Boolean aBoolean, DroiError droiError) {
+                if (aBoolean) {
+                    String url = user.getHeadIcon().getUri().toString();
+                    Picasso.with(mContext).load(url).into(headImageView);
+                    Toast.makeText(mContext, "上传成功", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, "上传失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
