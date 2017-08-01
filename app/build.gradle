@@ -32,7 +32,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     apt 'com.droi.sdk:annotationprocessor:+'
     compile 'com.droi.sdk:Core:+'
-    compile 'com.squareup.okhttp3:okhttp:3.0.1'
+    compile 'com.squareup.okhttp3:okhttp:3.8.0'
     compile 'com.droi.sdk:analytics:+'
     compile 'com.droi.sdk:feedback:+'
     compile 'com.droi.sdk:selfupdate:+'
