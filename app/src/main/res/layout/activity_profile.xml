@@ -177,9 +177,9 @@
             android:textSize="20sp" />
     </LinearLayout>
 
-    <include
-        android:id="@+id/select_pic"
-        layout="@layout/select_pic_dialog" />
+    <!--<include-->
+        <!--android:id="@+id/select_pic"-->
+        <!--layout="@layout/select_pic_dialog" />-->
 
 
 </RelativeLayout>

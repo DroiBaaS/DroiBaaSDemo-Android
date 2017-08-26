@@ -37,7 +37,6 @@ dependencies {
     compile 'com.droi.sdk:feedback:+'
     compile 'com.droi.sdk:selfupdate:+'
     compile 'com.droi.sdk:push:+'
-    compile 'com.droi.sdk:Utility:+'
     compile 'com.droi.sdk:oauth:+'
     compile 'com.android.support:support-v4:25.0.0'
     compile 'com.android.support:appcompat-v7:25.0.0'

@@ -23,6 +23,7 @@ import com.droi.sdk.droibaasdemo.models.AppType;
 import com.droi.sdk.droibaasdemo.models.Banner;
 import com.droi.sdk.droibaasdemo.models.MyUser;
 import com.droi.sdk.feedback.DroiFeedback;
+import com.droi.sdk.feedback.PicassoEngine;
 import com.droi.sdk.oauth.DroiOauth;
 import com.droi.sdk.push.DroiMessageHandler;
 import com.droi.sdk.push.DroiPush;
@@ -121,7 +122,8 @@ public class MyApplication extends Application {
 
         Log.i(TAG, "DroiFeedback");
         //初始化
-        DroiFeedback.initialize(this);
+        DroiFeedback.initialize(this, "Yt9PtNjOfgBsdr3qZmkezvf2XTncJ9BRv70K02vaKE3HzqVrCa5QHvmMGqdnzoEJ");
+        DroiFeedback.setImageEngine(new PicassoEngine());
 
         //权限设置
         DroiPermission permission = DroiPermission.getDefaultPermission();
